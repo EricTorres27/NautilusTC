@@ -14,15 +14,29 @@ class UserController extends Controller
     public function index()
     {
         //
+        //
+        if($request->has('search')) {
+            return $this->search($request);
+        }
+        $users = User::paginate(15);
+        return view('user.index', ['users' => $users, 'search' => false]);
     }
 
     /**
+
      * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
+
+     //The function create is for show the interface with the form for create a new user, get all roles and clients
+     // of the database and send the information to the form .
+     public function create(Request $request)
+     {
+         $prevAnswers = $request->get('prevAnswers');
+         $roles = Role::all();
+         return view('user.create', ['roles'=>$roles, 'prevAnswers' => $prevAnswers]);
+     }
 
     /**
      * Store a newly created resource in storage.
