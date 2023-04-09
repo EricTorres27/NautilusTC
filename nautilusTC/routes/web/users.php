@@ -12,6 +12,6 @@ Route::post('/register', [UserController::class, 'store'])
     ->middleware('can:registerUser');
     
 Route::get('/', [UserController::class, 'index'])
-    ->name('')
+    ->name('-index')
     ->middleware('can:consultUsers');
 
