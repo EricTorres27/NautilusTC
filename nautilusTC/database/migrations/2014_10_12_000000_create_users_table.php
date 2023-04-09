@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('idNumber')->unique();
             $table->string('email')->unique();
             $table->boolean('consent_information')->default(false);
             $table->boolean('consent_practices')->default(false);
