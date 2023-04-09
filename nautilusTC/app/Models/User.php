@@ -2,6 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Role;
+use App\Models\Session;
+use App\Models\Questionnaire;
+
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -20,7 +24,9 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password',
+        'consent_information',
+        'consent_practices',
+        'password'
     ];
 
     /**
@@ -41,4 +47,45 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * The roles that belong to the user.
+     */
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'users_roles', 'user_id', 'role_id');
+    }
+
+    /**
+     * Get current user roles.
+     */
+    public function getRoles()
+    {
+        return $this->roles->pluck('name')->toArray();
+    }
+
+    /**
+     * The sessions that belong to the user.
+     */
+    public function sessions()
+    {
+        return $this->belongsToMany(Session::class, 'users_sessions', 'user_id', 'session_id');
+    }
+
+    /**
+     * Get current user roles.
+     */
+    public function getSessions()
+    {
+        return $this->sessions->pluck('id')->toArray();
+    }
+
+    /**
+     * Get current user questionnaires.
+     */
+    public function questionnaires()
+    {
+        return $this->hasMany('App\Questionnaires');
+    }
+
 }
