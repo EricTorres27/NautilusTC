@@ -19,6 +19,7 @@ return new class extends Migration
             $table->boolean('consent_information')->default(false);
             $table->boolean('consent_practices')->default(false);
             $table->timestamp('email_verified_at')->nullable();
+            $table->string('rol');
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

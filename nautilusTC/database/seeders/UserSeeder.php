@@ -23,6 +23,7 @@ class UserSeeder extends Seeder
             'email' => 'a01700249@tec.mx',
             'consent_information' => true,
             'consent_practices' => true,
+            'rol' => 'Administrador',
             'password' => Hash::make('password'),
         ],
         [
@@ -32,6 +33,7 @@ class UserSeeder extends Seeder
             'email' => 'a01700912@tec.mx',
             'consent_information' => true,
             'consent_practices' => true,
+            'rol' => 'Estudiante',
             'password' => Hash::make('password'),
         ],
         [
@@ -41,6 +43,7 @@ class UserSeeder extends Seeder
             'email' => 'a01705318@tec.mx',
             'consent_information' => true,
             'consent_practices' => true,
+            'rol' => 'Estudiante',
             'password' => Hash::make('password'),
         ],
         [
@@ -50,6 +53,7 @@ class UserSeeder extends Seeder
             'email' => 'a01704320@tec.mx',
             'consent_information' => true,
             'consent_practices' => true,
+            'rol' => 'Estudiante',
             'password' => Hash::make('password'),
         ],
         [
@@ -59,6 +63,7 @@ class UserSeeder extends Seeder
             'email' => 'a01275595@tec.mx',
             'consent_information' => true,
             'consent_practices' => true,
+            'rol' => 'Estudiante',
             'password' => Hash::make('password'),
         ],
         [
@@ -68,6 +73,7 @@ class UserSeeder extends Seeder
             'email' => 'a01704696@tec.mx',
             'consent_information' => true,
             'consent_practices' => true,
+            'rol' => 'Estudiante',
             'password' => Hash::make('password'),
         ],
         [
@@ -77,6 +83,7 @@ class UserSeeder extends Seeder
             'email' => 'a01704052@tec.mx',
             'consent_information' => true,
             'consent_practices' => true,
+            'rol' => 'Administrador',
             'password' => Hash::make('password'),
         ]
         ]);

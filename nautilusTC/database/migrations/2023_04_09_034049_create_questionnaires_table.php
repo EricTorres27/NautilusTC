@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('questionnaires', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade'); ;
             $table->foreignId('session_id')->references('id')->on('sessions');
+            $table->unsignedBigInteger("solved_by");
             $table->integer('question_1');
             $table->integer('question_2');
             $table->integer('question_3');
