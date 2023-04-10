@@ -8,10 +8,20 @@ Route::get('/register', [UserController::class, 'create'])
     ->middleware('can:registerUser');
 
 Route::post('/register', [UserController::class, 'store'])
-    ->name('-register-save')
+->name('-register-save')
+->middleware('can:registerUser');
+
+Route::get('/{user}/edit', [UserController::class, 'edit'])
+    ->name('-edit')
     ->middleware('can:registerUser');
+
+    Route::post('/{user}/edit', [UserController::class, 'update'])
+    ->name('-update')
+    ->middleware('can:registerUser');
+
+
     
 Route::get('/', [UserController::class, 'index'])
-    ->name('-index')
+    ->name('')
     ->middleware('can:consultUsers');
 

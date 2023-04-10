@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -18,20 +19,9 @@ class UserController extends Controller
             'email' => 'required|string|email|max:255|unique:users,email,'.$request->id,
             'consent_information' => 'required|boolean',
             'consent_practices' => 'required|boolean',
-            'roles' => 'required|string',
+            'consent_practices' => 'required|string',
+            'rol' => 'required|string',
 
-        ]);
-        return $validator;
-    }
-
-    private function updateItemValidator($request) {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'idNumber' => ['required', Rule::unique('users')->ignore($request->id)],
-            'email' => 'required|string|email|max:255|unique:users,email,'.$request->id,
-            'consent_information' => 'required|boolean',
-            'consent_practices' => 'required|boolean',
-            'roles' => 'required|string',
         ]);
         return $validator;
     }
@@ -39,10 +29,7 @@ class UserController extends Controller
     //The function index is to show all users that exists on the database
     public function index()
     {
-        //
-        $users = User::with(
-            'roles:name'
-        )->get();
+        $users = User::all();
         return view('users.index', ['users' => $users]);
     }
 
@@ -67,23 +54,20 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $data = $request->except('_token');
-        $validator = $this->getItemValidator($request);
-
+        // dd($data);
         $prevAnswers = $data;
-        
-        if ($validator->fails()) {
-            return redirect()
-                ->route('users-register',['prevAnswers'=>$prevAnswers])
-                ->with('error', ErrorParser::parseValidatorError($validator));
-        }
-
         $dataUser = $data;
-        $valRole = $dataUser["roles"];
-        unset($dataUser["roles"]);
-        $password = implode($this->generatePassword());
-        $pin =  sprintf("%04d", mt_rand(1, 9999));
-        $userPassword= Hash::make( $password);
-
+        $userPassword= Hash::make($data['password']);
+        if(isset($data['consent_information'])){
+            $dataUser['consent_information'] = 1;
+        } else{
+                $dataUser['consent_information'] = 0;
+        }
+        if(isset($data['consent_practices'])){
+            $dataUser['consent_practices'] = 1;
+        } else{
+            $dataUser['consent_practices'] = 0;
+        }
         $user = new User;
         $user->name = $dataUser["name"];
         $user->idNumber = $dataUser["idNumber"];
@@ -91,12 +75,12 @@ class UserController extends Controller
         $user->password =  $userPassword;
         $user->consent_information = $dataUser["consent_information"];
         $user->consent_practices = $dataUser["consent_practices"];
+        $user->rol = $dataUser["rol"];
 
         try {
             $user->save();
-            $user->roles()->attach($valRole);
         } catch(\Exception $e) {
-            //dd($e);
+            dd($e);
             return redirect()
                 ->route('users-register', ['prevAnswers' => $data])
                 ->with('error', 'Error al crear el usuario.');
@@ -108,29 +92,11 @@ class UserController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(User $user)
-    {
-        //
-        $id=$user['id'];
-        $rols=UsersRoles::firstWhere('user_id', $id);
-
-        return view('user.details', ['readonly' => true, 'prevAnswers' => $user, 'userRole' =>$user->roles->first() ]);
-
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(User $user)
     {
-        //
-         //
-         $id=$user['id'];
-         $rols=UsersRoles::firstWhere('user_id', $id);
- 
-         return view('user.edit', ['editing' => true, 'prevAnswers' => $user, 'userRole' => $user->roles->first() ]);
+         return view('users.edit', ['editing' => true, 'prevAnswers' => $user]);
     }
 
     /**
@@ -140,34 +106,22 @@ class UserController extends Controller
     {
         //
         $data = $request->except('_token');
-        $validator = $this->updateItemValidator($request);
-
-        $prevAnswers = $data;
-
-        if ($validator->fails()) {
-
-            return redirect()
-                ->route('users-edit',[$user, 'prevAnswers'=>$prevAnswers])
-                ->with('error', ErrorParser::parseValidatorError($validator));
+        if(isset($data['consent_information'])){
+            $data['consent_information'] = 1;
+        } else{
+                $data['consent_information'] = 0;
         }
-
-        $valRole=$data["roles"];
-        unset($data["roles"]);
-
-        $array = array(
-            "role_id" => $valRole,
-            "user_id" => $user['id'],
-        );
-        
-        UsersRoles::where('user_id', '=', $user["id"])
-            ->update(['role_id' => $array["role_id"]]);
-
+        if(isset($data['consent_practices'])){
+            $data['consent_practices'] = 1;
+        } else{
+            $data['consent_practices'] = 0;
+        }
         $updatedUser = tap(User::where('id', '=', $user->id), function ($user) use ($data) {
             return $user->update($data);
         })->first();
-
+        $users = User::all();
         return redirect()
-        ->route('users-show', ['user' => $user,'prevAnswers' => $data])
+        ->route('users',['user' => $users])
         ->with('success', 'Se ha modificado el usuario.');
     }
 

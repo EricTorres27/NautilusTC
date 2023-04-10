@@ -25,9 +25,9 @@ class AuthServiceProvider extends ServiceProvider
     {
          //User
          Gate::define('registerUser', function($user){
-            $role = $user->roles()->first()->id;
+            $role = $user->rol;
             $allow;
-            if($role == 1 or $role == 2){
+            if($role == 'Administrador' or $role == 'Profesor'){
                 $allow=true;
             }else{
                 $allow=false;
@@ -36,10 +36,9 @@ class AuthServiceProvider extends ServiceProvider
             return $allow;
         });
         Gate::define('deleteUser', function($user){
-            $role = $user->roles()->first()->id;
-
+            $role = $user->rol;
             $allow;
-            if($role == 1 or $role == 2 ){
+            if($role == 'Administrador' or $role == 'Profesor'){
                 $allow=true;
             }else{
                 $allow=false;
@@ -49,10 +48,9 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('editUser', function($user){
-            $role = $user->roles()->first()->id;
-
+            $role = $user->rol;
             $allow;
-            if($role == 1 or $role == 2 ){
+            if($role == 'Administrador' or $role == 'Profesor'){
                 $allow=true;
             }else{
                 $allow=false;
@@ -62,10 +60,9 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('consultUser', function($user){
-            $role = $user->roles()->first()->id;
-
+            $role = $user->rol;
             $allow;
-            if($role == 1 ){
+            if($role == 'Administrador'){
                 $allow=true;
             }else{
                 $allow=false;
@@ -75,10 +72,9 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('consultUsers', function($user){
-            $role = $user->roles()->first()->id;
-
+            $role = $user->rol;
             $allow;
-            if($role == 1 or $role == 2){
+            if($role == 'Administrador' or $role == 'Profesor'){
                 $allow=true;
             }else{
                 $allow=false;
@@ -88,9 +84,9 @@ class AuthServiceProvider extends ServiceProvider
         });
         //Session
         Gate::define('registerSession', function($user){
-            $role = $user->roles()->first()->id;
+            $role = $user->rol;
             $allow;
-            if($role == 1 or $role == 2){
+            if($role == 'Administrador' or $role == 'Profesor'){
                 $allow=true;
             }else{
                 $allow=false;
@@ -99,10 +95,9 @@ class AuthServiceProvider extends ServiceProvider
             return $allow;
         });
         Gate::define('deleteSession', function($user){
-            $role = $user->roles()->first()->id;
-
+            $role = $user->rol;
             $allow;
-            if($role == 1 or $role == 2 ){
+            if($role == 'Administrador' or $role == 'Profesor'){
                 $allow=true;
             }else{
                 $allow=false;
@@ -112,10 +107,9 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('editSession', function($user){
-            $role = $user->roles()->first()->id;
-
+            $role = $user->rol;
             $allow;
-            if($role == 1 or $role == 2 ){
+            if($role == 'Administrador' or $role == 'Profesor'){
                 $allow=true;
             }else{
                 $allow=false;
@@ -125,10 +119,9 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('consultSession', function($user){
-            $role = $user->roles()->first()->id;
-
+            $role = $user->rol;
             $allow;
-            if($role == 1 ){
+            if($role == 'Administrador'){
                 $allow=true;
             }else{
                 $allow=false;
@@ -138,10 +131,9 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('consultSessions', function($user){
-            $role = $user->roles()->first()->id;
-
+            $role = $user->rol;
             $allow;
-            if($role == 1 or $role == 2){
+            if($role == 'Administrador' or $role == 'Profesor'){
                 $allow=true;
             }else{
                 $allow=false;

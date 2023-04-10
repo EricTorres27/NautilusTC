@@ -1,21 +1,19 @@
 @extends('layouts.main')
-@section('title', 'Registrar Usuario')
+@section('title', 'Editar Usuario')
 @section('main')
 
-<div class="uk-flex uk-flex-right uk-margin-left">
-        @can('deleteUser')
-        <button class="btn btn-primary btn-lg" type="button">Eliminar</button>
-        @endcan
-</div>
-@include('user.modal')
 
-<form action="" method="POST" class="was-validated">
-@csrf
-    <div class="col-12">
-            <label for="id" class="form-label">Id</label>
-            <div class="input-group">
-            <input type="hidden" class="form-control" id="id" name="id" placeholder="" required>
-            </div>
-    </div>
-@include('users.form')
-</form>
+<div class="container-fluid my-5">
+    <h1>Editar Usuario</h1>
+    <p class="lead">Edite los valores del usuario.</p>
+    <form class="was-validated" action="{{ route('users-update', $prevAnswers['id'])}}" method="POST">
+        @csrf
+        @include('users.editForm')
+    </form>
+</div>
+
+
+@section('javascript')
+<script src="{{asset('/js/validator.js')}}"></script>
+@endSection
+@endSection
