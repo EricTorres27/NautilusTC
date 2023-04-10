@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use App\Models\Session;
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -41,9 +42,19 @@ class SessionController extends Controller
     public function index()
     {
         //
-        //
-        $sessions = Session::all();
-        return view('session.index', ['sessions' => $sessions]);
+        $user = auth()->user();
+        if ($user->rol == 'Estudiante'){
+            $sessions = Session::where('user_id',$user['id'])
+            ->orWhere('assisted_by',$user['id'])
+            ->get();
+        }else{
+            $sessions = Session::all();
+        }
+        foreach($sessions as $session){
+            $session['user'] = User::where('id',$session['user_id'])->first();
+            $session['helper'] = User::where('id',$session['assisted_by'])->first();
+        }
+        return view('sessions.index', ['sessions' => $sessions]);
     }
 
     /**

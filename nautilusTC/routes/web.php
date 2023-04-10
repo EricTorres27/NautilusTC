@@ -31,3 +31,9 @@ Route::name('users')
     ->namespace('users')
     ->middleware('auth')
     ->group(__DIR__ . '/web/users.php');
+
+Route::name('sessions')
+    ->prefix('sessions')
+    ->namespace('sessions')
+    ->middleware('auth')
+    ->group(__DIR__ . '/web/session.php');
