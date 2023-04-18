@@ -15,7 +15,7 @@
             <input type="text" class="form-control" id="name" placeholder="" name = "name"
             value="@if(!empty($prevAnswers['name'])) {{$prevAnswers['name']}} @endif" required>
             <div class="invalid-feedback">
-                Escribe tu correo nombre completo
+                Escribe tu nombre completo
             </div>
         </div>
         <div class="col-sm-6">
@@ -55,7 +55,7 @@
         @endif
         <div class="col-12">
             <label for="consent_information" class="fw-bold form-label">Consentimiento sobre uso de información </label>
-            <label for="consent_information" class="form-label consent">Entiendo que todas las respuestas en este estudio pueden ser publicadas de manera no personalizada y solo seran usadas para fines de investigación. Si tengo más preguntas sobre el estudio o quiero más información, soy libre de contactar a los organizadores</label>
+            <label for="consent_information" class="form-label consent">Doy mi autorización para que los datos recolectados de mi participación en este estudio, puedan ser usados para fines de investigación y publicados de manera no personalizada.</label>
             <div class="form-check  mx-3">
                 <input type="checkbox" class="form-check-input" id="consent_information" name="consent_information" 
                 @if($prevAnswers['consent_information']) checked 

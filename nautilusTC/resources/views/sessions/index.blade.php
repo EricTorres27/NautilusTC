@@ -1,39 +1,52 @@
 @extends('layouts.main')
-@section('title', 'Registrar Usuario')
+@section('title', 'Sesiones')
 @section('css')
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" />
+<script defer src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script defer src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script defer src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+<script defer src="{{ asset('/js/table.js') }}"></script>   
 @endSection
 @section('main')
 
+
 <div class="container-fluid my-5">
-<h1>Usuarios</h1>
-<p class="lead">Por favor, ingrese los datos del usuario.</p>
-<a href="{{ route('users-register') }}" >Agregar usuario.</a>
-<table id="sesiones" style="width:100%" class="table table-striped">
+    <div class="row ">
+        <div class="mb-3 col-lg-10 col-md-10 col-sm-10">
+            <h1>Sesiones</h1>
+        </div>
+        <div class="mb-3 col-lg-2 col-md-2 col-sm-2">
+            <a type="button" class="btn btn-primary btn-lg" href="{{ route('sessions-register') }}">Nueva sesión</a>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table id="sessions" style="width:100%" class="table table-striped ">
             <thead>
                 <tr>
-                    <th>Creado por</th>
-                    <th>Compañer@</th>
+                    <th>Participantes</th>
                     <th>Formato</th>
                     <th>Fecha</th>
-                    <th>Editar</th>
+                    <th>Detalles</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($sessions as $session)
                 <tr>
-                    <td>{{$session->user['name']}}</td>
-                    <td>{{$session->helper['name']}}</td>
+                    <td>  
+                    @foreach($session->users as $user)
+                    {{$user->name}}
+                    <br>
+                    @endforeach
+                    </td>
                     <td>{{$session['format']}}</td>
                     <td>{{$session['created_at']}}</td>
-                    <td>
-                        <a href = "#" >Editar</a>
-                    </td>
+                    <td><a href="{{route('sessions-show',$session)}}" type="button" class="btn btn-md btn-secondary"><i class="fa-solid fa-file fa-xl"></i></a></td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
-
+    </div>
 @section('javascript')
 </div>
 @endSection

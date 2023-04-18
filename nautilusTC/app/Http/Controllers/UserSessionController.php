@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Questionnaires;
+use App\Models\UserSession;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class QuestionnairesController extends Controller
+class UserSessionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,7 +35,7 @@ class QuestionnairesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Questionnaires $questionnaires)
+    public function show(UserSession $userSession)
     {
         //
     }
@@ -43,7 +43,7 @@ class QuestionnairesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Questionnaires $questionnaires)
+    public function edit(UserSession $userSession)
     {
         //
     }
@@ -51,7 +51,7 @@ class QuestionnairesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Questionnaires $questionnaires)
+    public function update(Request $request, UserSession $userSession)
     {
         //
     }
@@ -59,7 +59,7 @@ class QuestionnairesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Questionnaires $questionnaires)
+    public function destroy(UserSession $userSession)
     {
         //
     }

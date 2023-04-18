@@ -6,6 +6,8 @@ use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use App\Utils\ErrorParser;
 
 class UserController extends Controller
 {
@@ -80,7 +82,6 @@ class UserController extends Controller
         try {
             $user->save();
         } catch(\Exception $e) {
-            dd($e);
             return redirect()
                 ->route('users-register', ['prevAnswers' => $data])
                 ->with('error', 'Error al crear el usuario.');
@@ -121,7 +122,7 @@ class UserController extends Controller
         })->first();
         $users = User::all();
         return redirect()
-        ->route('users',['user' => $users])
+        ->route('users',['users' => $users])
         ->with('success', 'Se ha modificado el usuario.');
     }
 

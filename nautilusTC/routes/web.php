@@ -22,6 +22,7 @@ Route::get('/home', function () {
 
 Route::redirect('/', '/login');
 
+
 Route::get('home',function(){
     return view('home');
 })->middleware('auth')->name('home');
@@ -37,3 +38,9 @@ Route::name('sessions')
     ->namespace('sessions')
     ->middleware('auth')
     ->group(__DIR__ . '/web/session.php');
+
+Route::name('questionnaires')
+    ->prefix('questionnaires')
+    ->namespace('questionnaires')
+    ->middleware('auth')
+    ->group(__DIR__ . '/web/questionnaires.php');

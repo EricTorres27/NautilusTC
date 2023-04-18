@@ -8,19 +8,20 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     *             $table->foreignId('user_id')
+      *          ->constrained()
+     *           ->onUpdate('cascade')
+      *          ->onDelete('cascade');
      */
     public function up(): void
     {
         Schema::create('sessions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-            $table->unsignedBigInteger('assisted_by');
             $table->string('format');
             $table->integer('wordCount');
-            $table->integer('duration');
+            $table->integer('durationHours');
+            $table->integer('durationMinutes');
+            $table->integer('durationSeconds');
             $table->timestamps();
         });
     }

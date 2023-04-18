@@ -61,9 +61,9 @@
             </div>
         </div>
         <div class="col-12">
-        <label for="consent_practices" class="fw-bold form-label">Consentimiento sobre uso de prácticas de software </label>
-        <label for="consent_practices" class="form-label consent">Autorizo el uso de mi resultado sobre la practica "STC0204 Desarrollo de componentes de software" de la materia "TC2005B Construcción de Software" en este estudio sabiendo que mi resultado podra ser publicado de manera no personalizada y solo sera utilizado para fines de investigación. Si tengo más preguntas sobre el estudio o quiero más información, soy libre de contactar a los organizadores </label>             
-        <div class="form-check  mx-3">
+            <label for="consent_practices" class="fw-bold form-label">Consentimiento sobre uso de prácticas de software </label>
+            <label for="consent_practices" class="form-label consent">Autorizo el uso de mi resultado sobre la practica "STC0204 Desarrollo de componentes de software" de la materia "TC2005B Construcción de Software" en este estudio sabiendo que mi resultado podra ser publicado de manera no personalizada y solo sera utilizado para fines de investigación. Si tengo más preguntas sobre el estudio o quiero más información, soy libre de contactar a los organizadores </label>             
+            <div class="form-check  mx-3">
                 <input type="checkbox" class="form-check-input" id="consent_practices" name="consent_practices" >
                 <label class="form-check-label" for="consent_practices">Acepto</label>
             </div>

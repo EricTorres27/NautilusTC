@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Questionnaire;
+use App\Models\User;
 
 class Session extends Model
 {
@@ -17,7 +19,9 @@ class Session extends Model
     protected $fillable = [
         'format',
         'wordCount',
-        'duration'
+        'durationHours',
+        'durationMinutes',
+        'durationSeconds',
     ];
 
     /**
@@ -33,7 +37,7 @@ class Session extends Model
      */
     public function getUsers()
     {
-        return $this->users->pluck('id')->toArray();
+        return $this->users->pluck('name')->toArray();
     }
 
     /**
@@ -41,7 +45,7 @@ class Session extends Model
      */
     public function questionnaires()
     {
-        return $this->hasMany('App\Questionnaires');
+        return $this->hasMany(Questionnaire::class);
     }
 
 }

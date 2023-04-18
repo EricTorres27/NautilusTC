@@ -6,32 +6,34 @@ use App\Models\Session;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use App\Utils\ErrorParser;
+use Illuminate\Support\Facades\DB;
 
 class SessionController extends Controller
 {
     private function getItemValidator($request) {
         $validator = Validator::make($request->all(), [
-            'format' => 'required|string|max:255',
-            'idNumber' => 'required|string|max:255',
-            'idNumber2' => 'required|string|max:255',
-            'interaction1' => 'required|integer|max:255',
-            'interaction2' => 'required|integer|max:255',
-            'durationH' => 'required|integer|max:255',
-            'durationM' => 'required|integer|max:255',
-            'durationS' => 'required|integer|max:255'
+            'modalidad' => 'required|string|max:255',
+            'matricula' => 'required|string|max:255',
+            'word_count' => 'required|integer|max:255',
+            'word_count_pareja' => 'required|integer|max:255',
+            'cronoHoras' => 'required|integer|max:255',
+            'cronoMinutos' => 'required|integer|max:255',
+            'cronoSegundos' => 'required|integer|max:255'
         ]);
         return $validator;
     }
 
     private function updateItemValidator($request) {
         $validator = Validator::make($request->all(), [
-            'format' => 'required|string|max:255',
-            'idNumber' => 'required|string|max:255',
-            'interaction1' => 'required|integer|max:255',
-            'interaction2' => 'required|integer|max:255',
-            'durationH' => 'required|integer|max:255',
-            'durationM' => 'required|integer|max:255',
-            'durationS' => 'required|integer|max:255'
+            'modalidad' => 'required|string|max:255',
+            'matricula' => 'required|string|max:255',
+            'word_count' => 'required|integer|max:255',
+            'word_count_pareja' => 'required|integer|max:255',
+            'cronoHoras' => 'required|integer|max:255',
+            'cronoMinutos' => 'required|integer|max:255',
+            'cronoSegundos' => 'required|integer|max:255'
         ]);
         return $validator;
     }
@@ -44,28 +46,34 @@ class SessionController extends Controller
         //
         $user = auth()->user();
         if ($user->rol == 'Estudiante'){
+            /*
+            $data=Session::join('users_sessions','users_sessions.session_id','=','sessions.id')->where('users_sessions.user_id','=',$user->id)->get();
             $sessions = Session::where('user_id',$user['id'])
             ->orWhere('assisted_by',$user['id'])
             ->get();
+            */
+            $sessions= $user->sessions;
         }else{
-            $sessions = Session::all();
+            $sessions = Session::with('users')->get();
         }
+        /*
         foreach($sessions as $session){
             $session['user'] = User::where('id',$session['user_id'])->first();
             $session['helper'] = User::where('id',$session['assisted_by'])->first();
         }
-        return view('sessions.index', ['sessions' => $sessions]);
+        */
+        return view('sessions.index', ['sessions' => $sessions], ['current_user' => $user]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
         //
         $prevAnswers = $request->get('prevAnswers');
-        $idNumbers = sessions::pluck('idNumber');
-        return view('session.create', ['roles'=>$roles, 'prevAnswers' => $prevAnswers]);
+        $idNumbers= User::select('idNumber')->get();
+        return view('sessions.create', ['prevAnswers' => $prevAnswers, 'idNumbers' => $idNumbers]);
     }
 
     /**
@@ -74,38 +82,83 @@ class SessionController extends Controller
     public function store(Request $request)
     {
         //
-        $data = $request->except('_token');
-        $validator = $this->getItemValidator($request);
-
-        $prevAnswers = $data;
         
-        if ($validator->fails()) {
-            return redirect()
-                ->route('sessions-register',['prevAnswers'=>$prevAnswers])
-                ->with('error', ErrorParser::parseValidatorError($validator));
+        $user = auth()->user();
+        $data = $request->except('_token');
+        if(in_array("word_count_partner",$data)){
+            $word_count_partner=$data["word_count_partner"];
+        }else{
+            $word_count_partner=0;
         }
-
+        $validator = $this->getItemValidator($request);
+        $prevAnswers = $data;
         $dataSession = $data;
-        $user= User::where('idNumber', $dataSession["idNumber"])->first();
-        $user2= User::where('idNumber2', $dataSession["idNumber2"])->first();
-        $session = new session;
-        $session->format = $dataSession["name"];
-        $session->wordCount = $dataSession["idNumber"];
-        $session->duration = int($dataSession["durationS"])+int($dataSession["durationM"])*60+int($dataSession["durationH"])*3600;
+        $session = new Session;
+        $session->format = $dataSession["format"];
+        $session->wordCount = intval($dataSession["word_count"])+intval($word_count_partner);
+        $session->durationHours =intval($dataSession["cronoHoras"]);+
+        $session->durationMinutes =intval($dataSession["cronoMinutos"]);
+        $session->durationSeconds =intval($dataSession["cronoSegundos"]);
+        $session->created_at=now();
+        $partner= User::where('idNumber', $dataSession["idNumber"])->first();
         try {
+            DB::beginTransaction();
             $session->save();
-            $user->sessions()->attach($user['id']);
-            $user2->sessions()->attach($user2['id']);
+            $user->sessions()->attach($session);
+            if($user['id']!=$partner['id'])
+            {
+                $partner->sessions()->attach($session);
+                $session->questionnaires()->createMany([
+                    [
+                    'user_id' => $user['id'],
+                    'question_1' => 0,
+                    'question_2' => 0,
+                    'question_3' => 0,
+                    'question_4' => 0,
+                    'question_5' => 0,
+                    'question_6' => 0,
+                    'answered' => false
+                    ],
+                    [
+                    'user_id' => $partner['id'],
+                    'question_1' => 0,
+                    'question_2' => 0,
+                    'question_3' => 0,
+                    'question_4' => 0,
+                    'question_5' => 0,
+                    'question_6' => 0,
+                    'answered' => false
+                    ]
+                ]);
+            }
+            else{
+                $session->questionnaires()->create([
+                    'user_id' => $user['id'],
+                    'question_1' => 0,
+                    'question_2' => 0,
+                    'question_3' => 0,
+                    'question_4' => 0,
+                    'question_5' => 0,
+                    'question_6' => 0,
+                    'answered' => false
+                ]);
+            }
+            DB::commit();
         } catch(\Exception $e) {
-            //dd($e);
+            DB::rollBack();
+            dd($e);
             return redirect()
                 ->route('sessions-register', ['prevAnswers' => $data])
-                ->with('error', 'Error al crear el sesion.');
+                ->with('error', 'Error al crear el sesión.');
         }
-
+        if ($user->rol == 'Estudiante'){
+            $sessions= $user->sessions;
+        }else{
+            $sessions = Session::with('users')->get();
+        }
         return redirect()
-            ->route('sessions')
-            ->with('success', 'Se ha registrado la sesion.');
+        ->route('sessions',['sessions' => $sessions])
+        ->with('success', 'Se ha registrado la sesión.');
     }
 
     /**
@@ -115,9 +168,8 @@ class SessionController extends Controller
     {
         //
         $id=$session['id'];
-        $rols=UsersRoles::firstWhere('user_id', $id);
-
-        return view('user.details', ['readonly' => true, 'prevAnswers' => $user, 'userRole' =>$user->roles->first() ]);
+        $participants= $session->users;
+        return view('sessions.details', ['readonly' => true, 'prevAnswers' => $session, 'participants' => $participants]);
     }
 
     /**
@@ -125,7 +177,9 @@ class SessionController extends Controller
      */
     public function edit(Session $session)
     {
-        //
+        $idNumbers= User::select('idNumber')->get();
+        $participants= $session->users;
+        return view('sessions.edit', ['editing' => true, 'prevAnswers' => $session, 'idNumbers' => $idNumbers, 'participants' => $participants]);
     }
 
     /**
@@ -133,7 +187,19 @@ class SessionController extends Controller
      */
     public function update(Request $request, Session $session)
     {
-        //
+        $data = $request->except('_token');
+        $updatedSession = tap(Session::where('id', '=', $session->id), function ($session) use ($data) {
+            return $session->update($data);
+        })->first();
+        $user = auth()->user();
+        if ($user->rol == 'Estudiante'){
+            $sessions= $user->sessions;
+        }else{
+            $sessions = Session::with('users')->get();
+        }
+        return redirect()
+        ->route('sessions',['sessions' => $sessions])
+        ->with('success', 'Se ha modificado la sesión.');
     }
 
     /**

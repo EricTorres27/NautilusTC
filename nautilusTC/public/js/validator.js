@@ -8,8 +8,8 @@ function validate(
     }
 ) {
     let error = undefined;
-    let domElem = getById(domId);
-    let value = getValById(domId);
+    let domElem = document.getElementById(domId);
+    let value = document.getElementById(domId).value;
     let notification = domElem.nextElementSibling;
     switch (validationType) {
         case "text":
@@ -34,12 +34,13 @@ function validate(
     }
 
     if (error) {
-        domElem.classList.remove("uk-form-success");
-        domElem.classList.add("uk-form-danger");
-        notification.innerText = error;
-        notification.classList.remove("uk-animation-reverse");
-        notification.classList.add("uk-animation-slide-top");
-        notification.hidden = false;
+        console.log(notification);
+        //domElem.classList.remove("uk-form-success");
+        //domElem.classList.add("uk-form-danger");
+        notification.innerHTML = error;
+        //notification.classList.remove("uk-animation-reverse");
+        //notification.classList.add("uk-animation-slide-top");
+        //notification.hidden = false;
     } else {
         notification.classList.remove("uk-animation-slide-top");
         domElem.classList.add("uk-form-success");
@@ -104,3 +105,13 @@ function validatePassword(password){
     return password === b ? undefined: "La contraseña no coincide"
 }
 
+function changeAtributes(item, atribute_name, atribute_value, operation){
+    if (operation=="put") {
+        item.setAttribute(atribute_name,atribute_value);
+    } 
+    else if (operation=="remove") {
+        if(item.hasAttribute(atribute_name)){
+            item.removeAttribute(atribute_name);
+        }
+    }
+}

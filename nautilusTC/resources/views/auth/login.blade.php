@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/styles.css" />
     <script src="js/bootstrtap.bundle.min.js"></script>    
-    <script src="js/uikit-icons.min.js"></script>
 </head>
 <body>
 <form class="was-validated" method="POST" action="/login">
@@ -20,7 +19,7 @@
                 <div class="card-body p-5 text-center">
                   <div class="mb-md-5 mt-md-4 pb-5">
                     <h2 class="fw-bold mb-2 text-uppercase">Iniciar sesión</h2>
-                    <p class="text-white-50 mb-5">Ingresar matrícula y contraseña!</p>
+                    <p class="text-white-50 mb-5">Ingresar correo y contraseña!</p>
                     <!-- Show errors -->
                     @if ($errors->any())
                     <div class="alert alert-info alert-dismissible" role="alert">
@@ -46,8 +45,9 @@
                     <button class="btn btn-outline-light btn-lg px-5" type="submit">Iniciar </button>
                   </div>
                   <div>
-                    <p class="mb-0">No tienes una cuenta? <a href="/crear-cuenta" class="text-white-50 fw-bold">Registrarse</a>
-                    </p>
+                    @if (Route::has('register'))
+                      <p class="mb-0">No tienes una cuenta?</p><a href="{{ route('register') }}" class="text-white-50 fw-bold">Registrarse</a>
+                    @endif
                   </div>
                 </div>
               </div>

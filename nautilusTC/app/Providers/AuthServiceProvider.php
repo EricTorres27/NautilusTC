@@ -86,7 +86,7 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('registerSession', function($user){
             $role = $user->rol;
             $allow;
-            if($role == 'Administrador' or $role == 'Profesor'){
+            if($role == 'Administrador' or $role == 'Profesor' or $role == 'Estudiante'){
                 $allow=true;
             }else{
                 $allow=false;
@@ -121,7 +121,7 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('consultSession', function($user){
             $role = $user->rol;
             $allow;
-            if($role == 'Administrador'){
+            if($role == 'Administrador'or $role == 'Profesor' or $role == 'Estudiante'){
                 $allow=true;
             }else{
                 $allow=false;
@@ -133,7 +133,44 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('consultSessions', function($user){
             $role = $user->rol;
             $allow;
-            if($role == 'Administrador' or $role == 'Profesor'){
+            if($role == 'Administrador' or $role == 'Profesor' or $role == 'Estudiante'){
+                $allow=true;
+            }else{
+                $allow=false;
+            }
+
+            return $allow;
+        });
+
+        //Questionnaires
+        Gate::define('consultQuestionnaires', function($user){
+            $role = $user->rol;
+            $allow;
+            if($role == 'Administrador'or $role == 'Profesor' or $role == 'Estudiante'){
+                $allow=true;
+            }else{
+                $allow=false;
+            }
+
+            return $allow;
+        });
+
+        Gate::define('consultQuestionnaires', function($user){
+            $role = $user->rol;
+            $allow;
+            if($role == 'Administrador' or $role == 'Profesor' or $role == 'Estudiante'){
+                $allow=true;
+            }else{
+                $allow=false;
+            }
+
+            return $allow;
+        });
+
+        Gate::define('editQuestionnaires', function($user){
+            $role = $user->rol;
+            $allow;
+            if($role == 'Administrador' or $role == 'Profesor' or $role == 'Estudiante'){
                 $allow=true;
             }else{
                 $allow=false;

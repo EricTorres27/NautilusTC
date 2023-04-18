@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Session;
+use App\Models\Questionnaire;
 
 class User extends Authenticatable
 {
@@ -47,5 +49,20 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * The roles that belong to the user.
+     */
+    public function sessions()
+    {
+        return $this->belongsToMany(Session::class, 'users_sessions', 'user_id', 'session_id');
+    }
+
+    /**
+     * Get current user questionnaires.
+     */
+    public function questionnaires()
+    {
+        return $this->hasMany(Questionnaire::class);
+    }
 
 }

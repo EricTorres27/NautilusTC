@@ -83,7 +83,7 @@ class UserSeeder extends Seeder
             'email' => 'a01704052@tec.mx',
             'consent_information' => true,
             'consent_practices' => true,
-            'rol' => 'Administrador',
+            'rol' => 'Estudiante',
             'password' => Hash::make('password'),
         ]
         ]);
